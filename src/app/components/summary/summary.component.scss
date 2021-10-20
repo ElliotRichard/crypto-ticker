@@ -1,0 +1,11 @@
+:host .crypto-card {
+  background: #333333;
+}
+:host .crypto-card.increase {
+  background: #558b2f;
+  color: #fff;
+}
+:host .crypto-card.decrease {
+  background: #c62828;
+  color: #fff;
+}
