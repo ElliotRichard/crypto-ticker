@@ -1,32 +1,26 @@
-<div class="mdl-grid">
-  <div class="mdl-cell mdl-cell--4-col"></div>
-  <div class="mdl-cell mdl-cell--4-col">
-    <form style="margin-bottom: 5px;" (submit)="add()">
-      <div class="ng-autocomplete">
-        <ng-autocomplete [data]="currentSearch" [searchKeyword]="keyword" (selected)='selectEvent($event)'
-          (inputChanged)='onChangeSearch($event)' (inputFocused)='onFocused($event)' [itemTemplate]="itemTemplate"
-          [notFoundTemplate]="notFoundTemplate">
-        </ng-autocomplete>
+<form style="margin-bottom: 5px;" (submit)="add()">
+  <div class="ng-autocomplete">
+    <ng-autocomplete [data]="currentSearch" [searchKeyword]="keyword" (selected)='selectEvent($event)'
+      (inputChanged)='onChangeSearch($event)' (inputFocused)='onFocused($event)' [itemTemplate]="itemTemplate"
+      [notFoundTemplate]="notFoundTemplate">
+    </ng-autocomplete>
 
-        <ng-template #itemTemplate let-item>
-          <a [innerHTML]="item"></a>
-        </ng-template>
+    <ng-template #itemTemplate let-item>
+      <a [innerHTML]="item"></a>
+    </ng-template>
 
-        <ng-template #notFoundTemplate let-notFound>
-          <div *ngIf="keyword.length > 0" [innerHTML]="notFound"></div>
-        </ng-template>
-      </div>
-    </form>
-    <table class="mdl-data-table mdl-data-table--selectable mdl-shadow--2dp" style="width: 100%;">
-      <tbody>
-        <tr *ngFor="let symbol of symbols">
-          <td class="mdl-data-table__cell--non-numeric">{{symbol}}</td>
-          <td style="padding-top: 6px;">
-            <button class="mdl-button" (click)="remove(symbol)">Remove</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <ng-template #notFoundTemplate let-notFound>
+      <div *ngIf="keyword.length > 0" [innerHTML]="notFound"></div>
+    </ng-template>
   </div>
-  <div class="mdl-cell mdl-cell--4-col"></div>
-</div>
+</form>
+<table class="mdl-data-table mdl-data-table--selectable mdl-shadow--2dp" style="width: 100%;">
+  <tbody>
+    <tr *ngFor="let symbol of symbols">
+      <td class="mdl-data-table__cell--non-numeric">{{symbol}}</td>
+      <td style="padding-top: 6px;">
+        <button class="mdl-button" (click)="remove(symbol)">Remove</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
