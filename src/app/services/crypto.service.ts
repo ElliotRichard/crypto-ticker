@@ -28,23 +28,38 @@ export class CryptoService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Returns a copy of stocks so that they are not directly modified
+   * Returns a copy of stocks so that they are not directly modified.
    * @returns A copy of stocks
    */
   get(): string[] {
     return cryptoCoins.slice();
   }
 
+  /**
+   * Adds a crypto coin to the list to be watched.
+   * @param crypto The coin to add
+   * @returns the updated lists of coins
+   */
   add(crypto: string) {
     cryptoCoins.push(crypto);
     return this.get();
   }
 
+  /**
+   * Removes a coin from the list being watched.
+   * @param crypto the coin being removed
+   * @returns the updated list of coins
+   */
   remove(crypto: any): string[] {
     cryptoCoins.splice(cryptoCoins.indexOf(crypto), 1);
     return this.get();
   }
 
+  /**
+   * Repeatedly requests the current price of the coins from the free Binance API.
+   * @param symbols coins being requested
+   * @returns the data as an observable
+   */
   load(symbols: string[]): Observable<any> {
     let repeatStatus = undefined;
     if (symbols) {
@@ -59,6 +74,7 @@ export class CryptoService {
               })
               .pipe(
                 tap((response: HttpResponse<any>) => {
+                  // 429 means the rate limit is reached
                   if (response.status === 429) {
                     repeatStatus = 0;
                   }
