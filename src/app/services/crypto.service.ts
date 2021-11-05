@@ -4,6 +4,7 @@ import { HttpResponse } from '@angular/common/http';
 import { from, Observable, of, forkJoin } from 'rxjs';
 import { tap, mergeMap, map, delay, repeat } from 'rxjs/operators';
 
+import { IBinanceCoin, IBinanceResponse } from '../classes/Coins';
 let cryptoCoins: string[] = [
   'BTCUSDT',
   'ETHUSDT',
@@ -60,33 +61,32 @@ export class CryptoService {
    * @param symbols coins being requested
    * @returns the data as an observable
    */
-  load(symbols: string[]): Observable<any> {
+  load(symbols: string[]): Observable<IBinanceCoin[]> {
     let repeatStatus = undefined;
-    if (symbols) {
-      return of(symbols).pipe(
-        delay(10000),
-        repeat(repeatStatus),
-        mergeMap((symbols) => {
-          const requestArrays = symbols.map((symbol) => {
-            return this.http
-              .get(service + '/ticker/24hr?symbol=' + symbol, {
-                observe: 'response',
+    return of(cryptoCoins).pipe(
+      delay(3000),
+      repeat(repeatStatus),
+      mergeMap((symbols) => {
+        const requestArrays = symbols.map((symbol) => {
+          return this.http
+            .get<HttpResponse<any>>(service + '/ticker/24hr?symbol=' + symbol, {
+              observe: 'response',
+            })
+            .pipe(
+              tap((response: HttpResponse<any>) => {
+                // 429 means the rate limit is reached
+                if (response.status === 429) {
+                  repeatStatus = 0;
+                }
+              }),
+              map((response: HttpResponse<any>) => {
+                response.body.time = new Date();
+                return response.body as IBinanceCoin;
               })
-              .pipe(
-                tap((response: HttpResponse<any>) => {
-                  // 429 means the rate limit is reached
-                  if (response.status === 429) {
-                    repeatStatus = 0;
-                  }
-                }),
-                map((response) => {
-                  return response.body;
-                })
-              );
-          });
-          return forkJoin(requestArrays);
-        })
-      );
-    } else return from('Error loading crypto prices');
+            );
+        });
+        return forkJoin(requestArrays);
+      })
+    );
   }
 }

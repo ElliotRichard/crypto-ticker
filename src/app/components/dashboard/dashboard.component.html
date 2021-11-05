@@ -2,9 +2,11 @@
   <div class="mdl-cell mdl-cell--12-col" *ngIf="!cryptoCoins" style="text-align: center;">
     Loading
   </div>
-  Graph View:
-  Live View:
-  <div class="mdl-cell mdl-cell--3-col" *ngFor="let crypto of cryptoCoins">
+  <ng-container *ngIf="cryptoCoins.length > 0">
+    <app-chart [$coinData]="cryptoCoins"></app-chart>
+  </ng-container>
+
+  <div class="mdl-cell mdl-cell--2-col" *ngFor="let crypto of cryptoCoins">
     <app-summary [crypto]="crypto"></app-summary>
   </div>
 </div>

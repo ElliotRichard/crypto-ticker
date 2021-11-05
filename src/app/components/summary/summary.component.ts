@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { IBinanceCoin } from 'src/app/classes/Coins';
 
 @Component({
   selector: 'app-summary',
@@ -6,15 +7,15 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./summary.component.scss'],
 })
 export class SummaryComponent implements OnInit {
-  @Input() crypto: any;
+  @Input() crypto: IBinanceCoin | any;
   constructor() {}
 
   ngOnInit(): void {}
   isNegative() {
-    return this.crypto && this.crypto.priceChange < 0;
+    return this.crypto && Number(this.crypto.priceChange) < 0;
   }
 
   isPositive() {
-    return this.crypto && this.crypto.priceChange > 0;
+    return this.crypto && Number(this.crypto.priceChange) > 0;
   }
 }
