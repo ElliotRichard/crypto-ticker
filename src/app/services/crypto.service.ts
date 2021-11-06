@@ -61,7 +61,7 @@ export class CryptoService {
    * @param symbols coins being requested
    * @returns the data as an observable
    */
-  load(symbols: string[]): Observable<IBinanceCoin[]> {
+  load(): Observable<IBinanceCoin[]> {
     let repeatStatus = undefined;
     return of(cryptoCoins).pipe(
       delay(3000),

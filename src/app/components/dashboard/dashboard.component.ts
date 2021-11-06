@@ -10,14 +10,11 @@ import { IBinanceCoin } from '../../classes/Coins';
 })
 export class DashboardComponent implements OnInit {
   cryptoCoins: IBinanceCoin[] = [];
-  symbols: string[];
 
-  constructor(private cryptoService: CryptoService) {
-    this.symbols = cryptoService.get();
-  }
+  constructor(private cryptoService: CryptoService) {}
 
   ngOnInit(): void {
-    this.cryptoService.load(this.symbols).subscribe((cryptoCoins) => {
+    this.cryptoService.load().subscribe((cryptoCoins) => {
       // assigning to new array so change detection is picked up
       this.cryptoCoins = [...cryptoCoins];
     });
