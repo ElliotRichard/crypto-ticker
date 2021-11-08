@@ -4,6 +4,7 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { CryptoService } from './crypto.service';
+import { IBinanceResponse } from '../classes/Coins';
 import { MockCryptoList, MockCryptoResponse } from './crypto.mock';
 
 describe('CryptoService', () => {
@@ -31,12 +32,18 @@ describe('CryptoService', () => {
     expect(service.get()).toContain('BTCUSDT');
     service.add('TEST');
     expect(service.get()).toEqual([...MockCryptoList, 'TEST']);
+    service.remove('TEST');
+    expect(service.get()).toEqual(MockCryptoList);
   });
 
   it('should load crypto data from API', (done) => {
-    service.load(MockCryptoList).subscribe((result) => {
+    service.load().subscribe((result) => {
       expect(result).toEqual(MockCryptoResponse);
       done();
     });
+    const request = http.expectOne(
+      baseUrl + '/ticker/24hr?symbol=' + MockCryptoList.join(',')
+    );
+    request.flush(MockCryptoResponse);
   });
 });
