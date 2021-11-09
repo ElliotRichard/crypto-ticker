@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpResponse } from '@angular/common/http';
-import { from, Observable, of, forkJoin } from 'rxjs';
+import { Observable, of, forkJoin } from 'rxjs';
 import { tap, mergeMap, map, delay, repeat } from 'rxjs/operators';
 
-import { IBinanceCoin, IBinanceResponse } from '../classes/Coins';
+import { IBinanceCoin } from '../classes/Coins';
+
 let cryptoCoins: string[] = [
   'BTCUSDT',
   'ETHUSDT',
@@ -12,9 +13,8 @@ let cryptoCoins: string[] = [
   'BUSDUSDT',
   'DOGEUSDT',
 ];
-
 let service: string = 'https://api2.binance.com/api/v3';
-let availableCryptoCoins: string[] = [];
+
 export interface CryptoInterface {
   symbol: string;
   lastPrice: number;

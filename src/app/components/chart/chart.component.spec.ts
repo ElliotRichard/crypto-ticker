@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ChartData } from '../../classes/ChartData';
+
 import { ChartComponent } from './chart.component';
+import { MockCryptoResponse } from '../../services/crypto.mock';
+import { IBinanceCoin } from 'src/app/classes/Coins';
 
 describe('ChartComponent', () => {
   let component: ChartComponent;
   let fixture: ComponentFixture<ChartComponent>;
-  let chartData: ChartData = new ChartData();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -19,11 +20,14 @@ describe('ChartComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create the component', () => {
+    let mockCryptoCoins: IBinanceCoin[] = [];
+    MockCryptoResponse.forEach((response) => {
+      let newCoin = response;
+      newCoin.time = new Date();
+      mockCryptoCoins.push(newCoin);
+    });
+    component.$coinData = mockCryptoCoins;
     expect(component).toBeTruthy();
-  });
-
-  it('should have chartData', () => {
-    expect(chartData).toBeTruthy();
   });
 });

@@ -8,9 +8,8 @@ describe('SummaryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SummaryComponent ]
-    })
-    .compileComponents();
+      declarations: [SummaryComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('SummaryComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create the component ', () => {
     expect(component).toBeTruthy();
   });
 });

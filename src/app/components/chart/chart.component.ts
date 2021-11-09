@@ -7,13 +7,15 @@ import { ChartData } from '../../classes/ChartData';
 })
 export class ChartComponent implements OnInit, OnChanges {
   @Input() $coinData: any;
+  private chartData: ChartData = new ChartData();
   options: any;
   updateOptions: any;
-  private chartData: ChartData = new ChartData();
   constructor() {}
 
   ngOnInit(): void {
-    this.chartData.updateData(this.$coinData);
+    if (this.$coinData) {
+      this.chartData.updateData(this.$coinData);
+    }
     // initialize chart options:
     this.options = {
       title: {

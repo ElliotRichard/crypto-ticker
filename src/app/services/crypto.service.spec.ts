@@ -3,9 +3,12 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
+
 import { CryptoService } from './crypto.service';
-import { IBinanceResponse } from '../classes/Coins';
+import { StubCryptoService } from './crypto.service.stub';
+import { IBinanceResponse, IBinanceCoin } from '../classes/Coins';
 import { MockCryptoList, MockCryptoResponse } from './crypto.mock';
+import { Observable } from 'rxjs';
 
 describe('CryptoService', () => {
   const baseUrl = 'https://api2.binance.com/api/v3';
@@ -17,9 +20,11 @@ describe('CryptoService', () => {
       imports: [HttpClientTestingModule],
       providers: [CryptoService],
     });
+
     service = TestBed.inject(CryptoService);
     http = TestBed.inject(HttpTestingController);
   });
+
   afterEach(() => {
     http.verify();
   });
@@ -28,22 +33,11 @@ describe('CryptoService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should manage a list of cryptos', () => {
+  it('should manage a list of cryptocoins', () => {
     expect(service.get()).toContain('BTCUSDT');
     service.add('TEST');
     expect(service.get()).toEqual([...MockCryptoList, 'TEST']);
     service.remove('TEST');
     expect(service.get()).toEqual(MockCryptoList);
-  });
-
-  it('should load crypto data from API', (done) => {
-    service.load().subscribe((result) => {
-      expect(result).toEqual(MockCryptoResponse);
-      done();
-    });
-    const request = http.expectOne(
-      baseUrl + '/ticker/24hr?symbol=' + MockCryptoList.join(',')
-    );
-    request.flush(MockCryptoResponse);
   });
 });
