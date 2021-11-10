@@ -1,5 +1,5 @@
 // Current conversion rate
-const USD_TO_NZD = 1.39;
+const USD_TO_NZD = 1.4169;
 
 export class Coin {
   price: number;
@@ -22,9 +22,9 @@ export class CoinFactory {
   static makeCoinFromResponse(response: IBinanceResponse) {
     return new Coin(
       response.symbol,
+      Number(response.priceChangePercent),
       Number(response.lastPrice),
       Number(response.priceChange),
-      Number(response.priceChangePercent),
       new Date()
     );
   }
