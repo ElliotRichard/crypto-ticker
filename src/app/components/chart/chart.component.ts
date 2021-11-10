@@ -18,9 +18,6 @@ export class ChartComponent implements OnInit, OnChanges {
     }
     // initialize chart options:
     this.options = {
-      title: {
-        text: 'Live Price',
-      },
       legend: {
         show: true,
         valueAnimation: true,
