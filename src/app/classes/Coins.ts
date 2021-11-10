@@ -1,22 +1,19 @@
+// Current conversion rate
 const USD_TO_NZD = 1.39;
 
 export class Coin {
-  name: string;
   price: number;
   priceChange: number;
-  priceChangePercent: number;
   timeDataFrom: Date;
   constructor(
-    name: string,
+    public name: string,
+    public priceChangePercent: number,
     price: number,
     priceChange: number,
-    priceChangePercent: number,
     time: Date
   ) {
-    this.name = name;
     this.price = price * USD_TO_NZD;
     this.priceChange = priceChange * USD_TO_NZD;
-    this.priceChangePercent = priceChangePercent;
     this.timeDataFrom = time;
   }
 }
@@ -56,8 +53,3 @@ export interface IBinanceResponse {
   lastId: number;
   count: number;
 }
-
-/* export interface IBinanceCoin extends IBinanceResponse {
-  time: Date;
-}
- */
