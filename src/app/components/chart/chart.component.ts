@@ -46,12 +46,19 @@ export class ChartComponent implements OnInit, OnChanges {
         },
       },
       xAxis: {
-        type: 'value',
+        type: 'time',
         splitLine: {
           show: false,
         },
         name: 'Time',
         scale: true,
+        min: function (value: any) {
+          console.log('min', value.min, 'max', value.max);
+          // If there is data older than 5 min, only show last 5 minutes
+          if (value.max - value.min > 300000) {
+            return value.max - 300000;
+          } else return value.min;
+        },
       },
       yAxis: {
         type: 'value',
@@ -61,16 +68,15 @@ export class ChartComponent implements OnInit, OnChanges {
         },
         name: 'Price ($NZD)',
         scale: true,
-        max: 90000,
       },
-      series: this.chartData.getSeries(),
+      series: this.chartData.getSeries('line'),
     };
   }
 
   ngOnChanges() {
     this.chartData.updateData(this.$coinData);
     this.updateOptions = {
-      series: this.chartData.getSeries(),
+      series: this.chartData.getSeries('line'),
       legend: {
         data: this.chartData.getLabels(),
       },

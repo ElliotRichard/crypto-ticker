@@ -1,14 +1,11 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
 
 import { CryptoService } from './crypto.service';
-import { StubCryptoService } from './crypto.service.stub';
-import { IBinanceResponse, IBinanceCoin } from '../classes/Coins';
-import { MockCryptoList, MockCryptoResponse } from './crypto.mock';
-import { Observable } from 'rxjs';
+import { MockCryptoList } from './crypto.mock';
 
 describe('CryptoService', () => {
   const baseUrl = 'https://api2.binance.com/api/v3';
@@ -20,7 +17,6 @@ describe('CryptoService', () => {
       imports: [HttpClientTestingModule],
       providers: [CryptoService],
     });
-
     service = TestBed.inject(CryptoService);
     http = TestBed.inject(HttpTestingController);
   });
@@ -39,5 +35,11 @@ describe('CryptoService', () => {
     expect(service.get()).toEqual([...MockCryptoList, 'TEST']);
     service.remove('TEST');
     expect(service.get()).toEqual(MockCryptoList);
+  });
+
+  it('should load coin data from Binance API', () => {
+    service.load().subscribe((response) => {
+      expect(response[0].name).toBe('BTCUSDT');
+    });
   });
 });

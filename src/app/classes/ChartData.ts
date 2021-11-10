@@ -1,16 +1,4 @@
-import { IBinanceCoin } from '../classes/Coins';
-
-export class IBinanceCoinAdapter {
-  label: string;
-  data: any;
-  constructor(coins: IBinanceCoin[]) {
-    this.label = '';
-    coins.forEach((coin) => {
-      this.label = coin.symbol;
-      this.data = coin.lastPrice;
-    });
-  }
-}
+import { Coin } from '../classes/Coins';
 
 export interface chartDatum {
   name: string;
@@ -25,22 +13,23 @@ export class ChartData {
   getLabels() {
     return this.labels.slice();
   }
-  updateData(coins: IBinanceCoin[]) {
+
+  updateData(coins: Coin[]) {
     let newCoins: string[] = [];
     coins.forEach((coin) => {
-      newCoins.push(coin.symbol);
-      if (!this.labels.includes(coin.symbol)) {
-        this.labels.push(coin.symbol);
-        this.data[coin.symbol] = [
+      newCoins.push(coin.name);
+      if (!this.labels.includes(coin.name)) {
+        this.labels.push(coin.name);
+        this.data[coin.name] = [
           {
-            name: coin.time.toString(),
-            value: [coin.time.getTime(), coin.lastPrice],
+            name: coin.timeDataFrom.toString(),
+            value: [coin.timeDataFrom.getTime(), coin.price],
           },
         ];
       } else {
-        this.data[coin.symbol].push({
-          name: coin.time.toString(),
-          value: [coin.time.getTime(), coin.lastPrice],
+        this.data[coin.name].push({
+          name: coin.timeDataFrom.toString(),
+          value: [coin.timeDataFrom.getTime(), coin.price],
         });
       }
     });
@@ -52,16 +41,17 @@ export class ChartData {
     });
   }
 
-  getSeries(): any[] {
+  getSeries(seriesType: string): any[] {
     let series: any[] = [];
     this.labels.forEach((label) => {
       series.push({
         name: label,
         id: label,
-        type: 'line',
-        showSymbol: true,
+        type: seriesType,
+        showname: true,
         hoverAnimation: true,
         data: this.data[label],
+        sampling: 'lttb',
       });
     });
     return series.slice();

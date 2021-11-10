@@ -3,10 +3,10 @@
   <span>
     <div class="mdl-card__title">
       <h4 style="color: #fff; margin: 0">
-        {{crypto?.symbol?.toUpperCase()}}</h4>
+        {{crypto?.name?.toUpperCase()}}</h4>
     </div>
     <div class="mdl-supporting-text crypto-card__data">
-      <span>{{crypto?.lastPrice | currency: 'NZD': 'symbol':'.8'}}</span>
+      <span>{{crypto?.price | currency: 'NZD': 'symbol':'.8'}}</span>
       <span>{{crypto?.priceChange | currency:'NZD': 'symbol': '.8'}}</span>
       <span>({{crypto?.priceChangePercent | percent:'.2'}})</span>
     </div>

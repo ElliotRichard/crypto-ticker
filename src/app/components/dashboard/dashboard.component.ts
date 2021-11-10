@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CryptoService, CryptoInterface } from '../../services/crypto.service';
-import { IBinanceCoin } from '../../classes/Coins';
+import { CryptoService, sortOption } from '../../services/crypto.service';
+import { Coin } from '../../classes/Coins';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,7 +9,7 @@ import { IBinanceCoin } from '../../classes/Coins';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  cryptoCoins: IBinanceCoin[] = [];
+  cryptoCoins: Coin[] = [];
 
   constructor(private cryptoService: CryptoService) {}
 
@@ -18,5 +18,16 @@ export class DashboardComponent implements OnInit {
       // assigning to new array so change detection is picked up
       this.cryptoCoins = [...cryptoCoins];
     });
+  }
+
+  sortCoins(option: string) {
+    switch (option) {
+      case 'price':
+        this.cryptoService.setSort(sortOption.price);
+        break;
+      case 'name':
+        this.cryptoService.setSort(sortOption.name);
+        break;
+    }
   }
 }
