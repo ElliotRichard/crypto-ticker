@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { ChartData } from '../../classes/ChartData';
+
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
@@ -7,9 +8,11 @@ import { ChartData } from '../../classes/ChartData';
 })
 export class ChartComponent implements OnInit, OnChanges {
   @Input() $coinData: any;
+  @Input() sortBy: any;
   private chartData: ChartData = new ChartData();
   options: any;
   updateOptions: any;
+  enableSeries: any = {};
   constructor() {}
 
   ngOnInit(): void {
@@ -21,13 +24,13 @@ export class ChartComponent implements OnInit, OnChanges {
       legend: {
         show: true,
         valueAnimation: true,
+        data: this.chartData.getLabels().sort((a, b) => a.localeCompare(b)),
       },
       tooltip: {
         trigger: 'axis',
         formatter: (params: any) => {
           params = params[0];
           const date = new Date(params.name);
-          console.log('name', params.name);
           return (
             date.getDate() +
             '/' +
@@ -50,7 +53,6 @@ export class ChartComponent implements OnInit, OnChanges {
         name: 'Time',
         scale: true,
         min: function (value: any) {
-          console.log('min', value.min, 'max', value.max);
           // If there is data older than 5 min, only show last 5 minutes
           if (value.max - value.min > 300000) {
             return value.max - 300000;
@@ -74,9 +76,7 @@ export class ChartComponent implements OnInit, OnChanges {
     this.chartData.updateData(this.$coinData);
     this.updateOptions = {
       series: this.chartData.getSeries('line'),
-      legend: {
-        data: this.chartData.getLabels(),
-      },
+      legend: this.chartData.getLegend(this.sortBy),
     };
   }
 }

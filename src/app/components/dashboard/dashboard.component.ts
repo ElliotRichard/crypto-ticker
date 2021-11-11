@@ -10,7 +10,7 @@ import { Coin } from '../../classes/Coins';
 })
 export class DashboardComponent implements OnInit {
   cryptoCoins: Coin[] = [];
-
+  sortBy = sortOption.name;
   constructor(private cryptoService: CryptoService) {}
 
   ngOnInit(): void {
@@ -23,9 +23,11 @@ export class DashboardComponent implements OnInit {
   sortCoins(option: string) {
     switch (option) {
       case 'price':
+        this.sortBy = sortOption.price;
         this.cryptoService.setSort(sortOption.price);
         break;
       case 'name':
+        this.sortBy = sortOption.name;
         this.cryptoService.setSort(sortOption.name);
         break;
     }

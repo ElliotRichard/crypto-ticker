@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ChartComponent } from './chart.component';
 import { MockCryptoResponse } from '../../services/crypto.mock';
-import { IBinanceCoin } from 'src/app/classes/Coins';
+import { Coin } from 'src/app/classes/Coins';
 
 describe('ChartComponent', () => {
   let component: ChartComponent;
@@ -21,7 +21,7 @@ describe('ChartComponent', () => {
   });
 
   it('should create the component', () => {
-    let mockCryptoCoins: IBinanceCoin[] = [];
+    let mockCryptoCoins: Coin[] = [];
     MockCryptoResponse.forEach((response) => {
       let newCoin = response;
       newCoin.time = new Date();

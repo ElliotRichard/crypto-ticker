@@ -3,7 +3,7 @@
     Loading
   </div>
   <ng-container *ngIf="cryptoCoins.length > 0">
-    <app-chart [$coinData]="cryptoCoins"></app-chart>
+    <app-chart [sortBy]="sortBy" [$coinData]="cryptoCoins"></app-chart>
 
     <div class="mdl-cell mdl-cell--12-col">
       <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="sortCoins('price')">Sort

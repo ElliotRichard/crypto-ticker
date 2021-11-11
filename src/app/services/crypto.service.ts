@@ -1,8 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpResponse } from '@angular/common/http';
-import { Observable, of, forkJoin } from 'rxjs';
-import { tap, mergeMap, map, delay, repeat } from 'rxjs/operators';
+import {
+  Observable,
+  of,
+  forkJoin,
+  timer,
+  interval,
+  from,
+  empty,
+  Subject,
+} from 'rxjs';
+import {
+  tap,
+  mergeMap,
+  map,
+  delay,
+  repeat,
+  expand,
+  throttleTime,
+  debounceTime,
+  repeatWhen,
+} from 'rxjs/operators';
 
 import { CoinFactory, Coin, IBinanceResponse } from '../classes/Coins';
 
@@ -66,10 +85,9 @@ export class CryptoService {
    * @returns the data as an observable
    */
   load(): Observable<Coin[]> {
-    let repeatStatus = undefined;
+    let repeatStatus: number | undefined = undefined;
     return of(cryptoCoins).pipe(
-      delay(3000),
-      repeat(repeatStatus),
+      repeatWhen((_) => _.pipe(delay(2000), repeat(repeatStatus))),
       mergeMap((symbols) => {
         const requestArrays = symbols.map((symbol) => {
           return this.http
@@ -100,6 +118,10 @@ export class CryptoService {
 
   setSort(option: sortOption) {
     this.sortBy = option;
+  }
+
+  getSort() {
+    return this.sortBy;
   }
 
   private _sort(coins: Coin[]): Coin[] {
