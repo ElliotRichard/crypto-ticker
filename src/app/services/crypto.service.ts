@@ -1,10 +1,29 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpResponse } from '@angular/common/http';
-import { Observable, of, forkJoin } from 'rxjs';
-import { tap, mergeMap, map, delay, repeat } from 'rxjs/operators';
+import {
+  Observable,
+  of,
+  forkJoin,
+  timer,
+  interval,
+  from,
+  empty,
+  Subject,
+} from 'rxjs';
+import {
+  tap,
+  mergeMap,
+  map,
+  delay,
+  repeat,
+  expand,
+  throttleTime,
+  debounceTime,
+  repeatWhen,
+} from 'rxjs/operators';
 
-import { IBinanceCoin } from '../classes/Coins';
+import { CoinFactory, Coin, IBinanceResponse } from '../classes/Coins';
 
 let cryptoCoins: string[] = [
   'BTCUSDT',
@@ -14,7 +33,10 @@ let cryptoCoins: string[] = [
   'DOGEUSDT',
 ];
 let service: string = 'https://api2.binance.com/api/v3';
-
+export enum sortOption {
+  price,
+  name,
+}
 export interface CryptoInterface {
   symbol: string;
   lastPrice: number;
@@ -26,6 +48,7 @@ export interface CryptoInterface {
   providedIn: 'root',
 })
 export class CryptoService {
+  private sortBy: sortOption = sortOption.name;
   constructor(private http: HttpClient) {}
 
   /**
@@ -61,11 +84,10 @@ export class CryptoService {
    * @param symbols coins being requested
    * @returns the data as an observable
    */
-  load(): Observable<IBinanceCoin[]> {
-    let repeatStatus = undefined;
+  load(): Observable<Coin[]> {
+    let repeatStatus: number | undefined = undefined;
     return of(cryptoCoins).pipe(
-      delay(3000),
-      repeat(repeatStatus),
+      repeatWhen((_) => _.pipe(delay(2000), repeat(repeatStatus))),
       mergeMap((symbols) => {
         const requestArrays = symbols.map((symbol) => {
           return this.http
@@ -80,13 +102,37 @@ export class CryptoService {
                 }
               }),
               map((response: HttpResponse<any>) => {
-                response.body.time = new Date();
-                return response.body as IBinanceCoin;
+                return CoinFactory.makeCoinFromResponse(
+                  response.body as IBinanceResponse
+                );
               })
             );
         });
         return forkJoin(requestArrays);
+      }),
+      map((coins: Coin[]) => {
+        return this._sort(coins);
       })
     );
+  }
+
+  setSort(option: sortOption) {
+    this.sortBy = option;
+  }
+
+  getSort() {
+    return this.sortBy;
+  }
+
+  private _sort(coins: Coin[]): Coin[] {
+    switch (this.sortBy) {
+      case sortOption.name:
+        coins.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case sortOption.price:
+        coins.sort((a, b) => b.price - a.price);
+        break;
+    }
+    return coins;
   }
 }

@@ -3,8 +3,8 @@
   <form style="margin-bottom: 5px;" (submit)="add()">
     <div class="ng-autocomplete">
       <ng-autocomplete [data]="currentSearch" [searchKeyword]="keyword" (selected)='selectEvent($event)'
-        (inputChanged)='onChangeSearch($event)' (inputFocused)='onFocused($event)' [itemTemplate]="itemTemplate"
-        [notFoundTemplate]="notFoundTemplate">
+        (inputChanged)='onChangeSearch($event)' [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate"
+        #autoComplete>
       </ng-autocomplete>
 
       <ng-template #itemTemplate let-item>
