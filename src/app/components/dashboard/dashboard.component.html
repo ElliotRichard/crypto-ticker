@@ -6,14 +6,23 @@
     <app-chart [sortBy]="sortBy" [$coinData]="cryptoCoins"></app-chart>
 
     <div class="mdl-cell mdl-cell--12-col">
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="sortCoins('price')">Sort
-        By
-        Price (Descending)</button>
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="sortCoins('name')">Sort
-        By
-        Name (Ascending)</button>
+      <div class="mdl-cell mdl-cell--6-col">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+          (click)="sortCoins('price')">Sort
+          By
+          Price ($NZD)</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" (click)="sortCoins('name')">Sort
+          By
+          Name</button>
+      </div>
+      <div class="mdl-cell mdl-cell--6-col">
+
+      </div>
 
     </div>
+
+
+
 
     <div class="mdl-cell mdl-cell--2-col" *ngFor="let crypto of cryptoCoins">
       <app-summary [crypto]="crypto"></app-summary>

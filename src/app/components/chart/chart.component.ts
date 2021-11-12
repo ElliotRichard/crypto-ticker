@@ -50,9 +50,16 @@ export class ChartComponent implements OnInit, OnChanges {
         splitLine: {
           show: false,
         },
-        name: 'Time',
+        // name: 'Time',
+        axisLabel: {
+          formatter: (time: Date, index: any) => {
+            return new Date(time).toLocaleTimeString(['en-nz', 'en-gb'], {
+              hour12: true,
+            });
+          },
+        },
         scale: true,
-        min: function (value: any) {
+        min: (value: any) => {
           // If there is data older than 5 min, only show last 5 minutes
           if (value.max - value.min > 300000) {
             return value.max - 300000;
@@ -61,12 +68,22 @@ export class ChartComponent implements OnInit, OnChanges {
       },
       yAxis: {
         type: 'value',
-        boundaryGap: [0, '100%'],
+        // boundaryGap: [0, '100%'],
         splitLine: {
           show: false,
         },
-        name: 'Price ($NZD)',
         scale: true,
+      },
+      axisLabel: {
+        formatter: (price: any) => {
+          return parseFloat(price).toLocaleString('en-nz', {
+            style: 'currency',
+            currency: 'NZD',
+            currencyDisplay: 'narrowSymbol',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 10,
+          });
+        },
       },
       series: this.chartData.getSeries('line'),
     };

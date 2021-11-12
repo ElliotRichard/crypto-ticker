@@ -1,13 +1,18 @@
-<div class="mdl-card-square crypto-card mdl-shadow--2dp" [ngClass]="{increase: isPositive(), decrease: isNegative()}"
+<div class="mdl-card-square mdl-shadow--2dp crypto-card" [ngClass]="{increase: isPositive(), decrease: isNegative()}"
   style="width: 100%; height: fit-contents">
   <span>
-    <div class="mdl-card__title">
+    <div class="mdl-card__title crypto-card--title">
       <h4 style="color: #fff; margin: 0">
         {{crypto?.name?.toUpperCase()}}</h4>
     </div>
+    <span class="crypto-card--price">
+      <h5>{{crypto?.price | currency: 'NZD': 'symbol-narrow':'0.0-10'}}</h5>
+    </span>
     <div class="mdl-supporting-text crypto-card__data">
-      <span>{{crypto?.price | currency: 'NZD': 'symbol':'.8'}}</span>
-      <span>{{crypto?.priceChange | currency:'NZD': 'symbol': '.8'}}</span>
+      <span class="crypto-card__data--title">
+        24 Hour Change:
+      </span>
+      <span>{{crypto?.priceChange | currency:'NZD': 'symbol-narrow': '0.0-10'}}</span>
       <span>({{crypto?.priceChangePercent | percent:'.2'}})</span>
     </div>
   </span>

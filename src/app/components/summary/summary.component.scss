@@ -1,16 +1,32 @@
 :host .crypto-card {
   background: #333333;
+  padding-bottom: 10px;
 }
 :host .crypto-card.increase {
   background: #558b2f;
   color: #fff;
 }
+
 :host .crypto-card.decrease {
   background: #c62828;
   color: #fff;
+}
+.crypto-card--title {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.crypto-card--price {
+  text-align: center;
 }
 
 .crypto-card__data {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.crypto-card__data--title {
+  align-self: flex-start;
+  margin-left: 5px;
 }
